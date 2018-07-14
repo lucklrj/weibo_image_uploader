@@ -1,8 +1,11 @@
 package http
 
 import (
-	"github.com/parnurzeal/gorequest"
-	"sync"
+	"github.com/ddliu/go-httpclient"
+	"encoding/json"
+	"os"
+	"fmt"
+	"net/http"
 )
 
 var (
@@ -10,23 +13,30 @@ var (
 )
 
 type HttpRequest struct {
-	Request *gorequest.SuperAgent
-	mu      sync.Mutex
 }
 
-func (h *HttpRequest) Get(url string) (body string, errs []error) {
-	h.mu.Lock()
-	_, body, errs = h.Request.Get(url).End()
-	h.mu.Unlock()
-	return body, errs
-}
-func (h *HttpRequest) Post(url string, postData map[string]string) (body string, errs []error) {
-	h.mu.Lock()
-	_, body, errs = h.Request.Post(url).Type("multipart").Send(postData).End()
-	h.mu.Unlock()
-	return body, errs
+func (h *HttpRequest) Get(url string) (body string, errs error) {
+	res, _ := httpclient.Begin().Get(url)
+	return res.ToString()
 }
 
-func init() {
-	Request = HttpRequest{Request: gorequest.New()}
+func (h *HttpRequest) Post(url string, postData map[string]string, save_cookie bool, cookies []*http.Cookie) (body string, errs error) {
+	res, _ := httpclient.Begin().WithCookie(cookies...).Post(url, postData)
+	if save_cookie == true {
+		saveCookie(url)
+	}
+	return res.ToString()
+}
+func saveCookie(url string) {
+	httpCookie := make(map[string]string)
+	for _, cookie := range httpclient.Cookies(url) {
+		httpCookie[cookie.Name] = cookie.Value
+	}
+	httpCookieBytes, _ := json.Marshal(httpCookie)
+	file, err := os.OpenFile("cookie.txt", os.O_RDWR|os.O_CREATE, os.ModePerm)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	file.Write(httpCookieBytes)
+	defer file.Close()
 }

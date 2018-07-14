@@ -2,10 +2,9 @@ package: .
 import:
 - package: github.com/fatih/color
   version: v1.7.0
-- package: github.com/parnurzeal/gorequest
-  version: v0.2.15
 - package: github.com/PuerkitoBio/goquery
   version: v1.4.1
 - package: github.com/tidwall/gjson
   version: v1.1.2
-
+- package: github.com/ddliu/go-httpclient
+  version: v0.5.1

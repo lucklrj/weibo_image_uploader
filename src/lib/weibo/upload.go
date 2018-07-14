@@ -5,15 +5,16 @@ import (
 	"lib/system"
 	"os"
 	"io/ioutil"
-	"lib/http"
 	"regexp"
 	"github.com/tidwall/gjson"
 	"errors"
 	"strconv"
 	"math/rand"
+	http2 "net/http"
+	"lib/http"
 )
 
-func UploadImg(filePath string) string {
+func UploadImg(filePath string, cookies []*http2.Cookie) string {
 	file, err := os.OpenFile(filePath, os.O_RDONLY, os.ModePerm)
 	defer file.Close()
 	system.OutputAllErros(err, true)
@@ -23,11 +24,12 @@ func UploadImg(filePath string) string {
 	postData := make(map[string]string)
 	postData["b64_data"] = base64.StdEncoding.EncodeToString(filContent)
 	
-	uploadResult, errs := http.Request.Post(imgUploadUrl, postData)
+	uploadResult, errs := http.Request.Post(imgUploadUrl, postData, false, cookies)
 	system.OutputAllErros(errs, true)
 	
 	reg := regexp.MustCompile(`.*?(\{.*)`)
 	respJsonMatchResult := reg.FindAllStringSubmatch(uploadResult, -1)
+	
 	if len(respJsonMatchResult) == 0 {
 		system.OutputAllErros(errors.New("上传图片失败"), true)
 	}

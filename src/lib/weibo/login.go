@@ -13,6 +13,8 @@ import (
 	"regexp"
 	"os"
 	"errors"
+	"io/ioutil"
+	http2 "net/http"
 )
 
 type preLoginData struct {
@@ -103,7 +105,8 @@ func loginSubmit(preLoginData preLoginData) {
 	postData["returntype"] = "META"
 	//postData["door"] = "123"
 	
-	postResult, errs := http.Request.Post(postUrl, postData)
+	cookies := make([]*http2.Cookie, 0)
+	postResult, errs := http.Request.Post(postUrl, postData, true, cookies)
 	system.OutputAllErros(errs, true)
 	
 	reg := regexp.MustCompile(`(https:\/\/passport.*?)\'`)
@@ -122,5 +125,27 @@ func loginSubmit(preLoginData preLoginData) {
 	if len(matchResult) == 0 {
 		system.OutputAllErros(errors.New("无法获取登陆token"), true)
 	}
+}
+
+func ParserCookie() ([]*http2.Cookie, error) {
+	cookiePath := "cookie.txt"
+	cookieFile, err := os.OpenFile(cookiePath, os.O_RDONLY|os.O_CREATE, os.ModePerm)
+	cookieContent, err := ioutil.ReadAll(cookieFile)
 	
+	if len(cookieContent) == 0 {
+		return nil, nil
+	}
+	cookieContentJson := gjson.ParseBytes(cookieContent).Value().(map[string]interface{})
+	if len(cookieContentJson) == 0 {
+		return nil, nil
+	}
+	cookies := make([]*http2.Cookie, 0)
+	for key, val := range cookieContentJson {
+		cookies = append(cookies, &http2.Cookie{
+			Name:  key,
+			Value: val.(string),
+		})
+	}
+	color.Green("解析cookie成功")
+	return cookies, err
 }

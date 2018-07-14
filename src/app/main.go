@@ -1,20 +1,26 @@
 package main
 
 import (
-	"net/url"
-	"encoding/base64"
 	"lib/weibo"
 	"fmt"
+	"net/url"
+	"encoding/base64"
+	"lib/system"
 )
 
 func main() {
-	username := "sunny_lrj@yeah.net"
-	username = url.QueryEscape(username)
-	username = base64.StdEncoding.EncodeToString([]byte(username))
+	cookies, err := weibo.ParserCookie()
+	system.OutputAllErros(err, true)
 	
-	password := "123asd123"
-	weibo.Login(username, password)
+	if cookies == nil {
+		username := "sunny_lrj@yeah.net"
+		username = url.QueryEscape(username)
+		username = base64.StdEncoding.EncodeToString([]byte(username))
+		
+		password := "123zxc123"
+		weibo.Login(username, password)
+	}
 	
-	imgUrl := weibo.UploadImg("girls.jpg")
+	imgUrl := weibo.UploadImg("girls.jpg", cookies)
 	fmt.Println(imgUrl)
 }
