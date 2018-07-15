@@ -30,7 +30,8 @@ func UploadImg(filePath string, cookies []*http2.Cookie) string {
 	reg := regexp.MustCompile(`.*?(\{.*)`)
 	respJsonMatchResult := reg.FindAllStringSubmatch(uploadResult, -1)
 	
-	if len(respJsonMatchResult) == 0 {
+	code := gjson.Parse(respJsonMatchResult[0][1]).Get("code").Value()
+	if code != "A00006" {
 		system.OutputAllErros(errors.New("上传图片失败"), true)
 	}
 	pid := gjson.Parse(respJsonMatchResult[0][1]).Get("data.pics.pic_1.pid").String()

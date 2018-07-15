@@ -17,7 +17,7 @@ func main() {
 		username = url.QueryEscape(username)
 		username = base64.StdEncoding.EncodeToString([]byte(username))
 		
-		password := "123zxc123"
+		password := "123123"
 		weibo.Login(username, password)
 	}
 	
