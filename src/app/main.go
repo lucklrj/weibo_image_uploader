@@ -21,6 +21,7 @@ func main() {
 		weibo.Login(username, password)
 	}
 	
-	imgUrl := weibo.UploadImg("girls.jpg", cookies)
+	//imgUrl := weibo.UploadImg("girls.jpg", cookies)
+	imgUrl := weibo.UploadImg("http://cn.ign.com/sm/ign_cn/screenshot/r/robert-dow/robert-downey-jr-is-back-as-iron-man-in-avengers-infinity-wa_qxqa.jpg", cookies)
 	fmt.Println(imgUrl)
 }

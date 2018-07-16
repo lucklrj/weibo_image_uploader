@@ -12,17 +12,25 @@ import (
 	"math/rand"
 	http2 "net/http"
 	"lib/http"
+	"strings"
 )
 
 func UploadImg(filePath string, cookies []*http2.Cookie) string {
-	file, err := os.OpenFile(filePath, os.O_RDONLY, os.ModePerm)
-	defer file.Close()
-	system.OutputAllErros(err, true)
-	filContent, err := ioutil.ReadAll(file)
+	fileContent := []byte("")
+	if strings.HasPrefix(filePath, "http://") == true || strings.HasPrefix(filePath, "https://") == true {
+		fileContentString, errs := http.Request.Get(filePath)
+		fileContent = []byte(fileContentString)
+		system.OutputAllErros(errs, true)
+	} else {
+		file, err := os.OpenFile(filePath, os.O_RDONLY, os.ModePerm)
+		defer file.Close()
+		system.OutputAllErros(err, true)
+		fileContent, _ = ioutil.ReadAll(file)
+	}
 	
 	imgUploadUrl := "http://picupload.service.weibo.com/interface/pic_upload.php?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog&cb=http://weibo.com/aj/static/upimgback.html?_wv=5&callback=STK_ijax_1111";
 	postData := make(map[string]string)
-	postData["b64_data"] = base64.StdEncoding.EncodeToString(filContent)
+	postData["b64_data"] = base64.StdEncoding.EncodeToString([]byte(fileContent))
 	
 	uploadResult, errs := http.Request.Post(imgUploadUrl, postData, false, cookies)
 	system.OutputAllErros(errs, true)
