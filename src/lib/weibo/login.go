@@ -128,12 +128,8 @@ func loginSubmit(preLoginData preLoginData) {
 }
 
 func ParserCookie(account string) ([]*http2.Cookie, error) {
-	cookiePath := ""
-	if account != "" {
-		cookiePath = account + ".txt"
-	} else {
-		cookiePath = "cookie.txt"
-	}
+	cookiePath := system.GetCookName()
+	
 	cookieFile, err := os.OpenFile(cookiePath, os.O_RDONLY|os.O_CREATE, os.ModePerm)
 	cookieContent, err := ioutil.ReadAll(cookieFile)
 	

@@ -1,11 +1,12 @@
 package http
 
 import (
-	"github.com/ddliu/go-httpclient"
 	"encoding/json"
-	"os"
 	"fmt"
+	"github.com/ddliu/go-httpclient"
+	"lib/system"
 	"net/http"
+	"os"
 )
 
 var (
@@ -33,7 +34,7 @@ func saveCookie(url string) {
 		httpCookie[cookie.Name] = cookie.Value
 	}
 	httpCookieBytes, _ := json.Marshal(httpCookie)
-	file, err := os.OpenFile("cookie.txt", os.O_RDWR|os.O_CREATE, os.ModePerm)
+	file, err := os.OpenFile(system.GetCookName(), os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
