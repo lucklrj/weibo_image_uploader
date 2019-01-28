@@ -1,26 +1,20 @@
-hash: db8b17f916a3edec3dd182b7d6e3e19399439617a8f2941242df9cf8a9e917b8
-updated: 2018-06-29T17:00:51.248141+08:00
+hash: fa74806174b9fe31a4c0cd5f68bcda9ca7d69a8c70b740525267d7fe8364fa6a
+updated: 2019-01-28T15:54:16.252904+08:00
 imports:
+- name: github.com/ddliu/go-httpclient
+  version: 72917d81d0423a6235790470d15a4d099e3490f9
 - name: github.com/fatih/color
   version: 5b77d2a35fb0ede96d138fc9a99f5c9b6aef11b4
 - name: github.com/mattn/go-colorable
   version: efa589957cd060542a26d2dd7832fd6a6c6c3ade
 - name: github.com/mattn/go-isatty
-  version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
-- name: github.com/moul/http2curl
-  version: 9ac6cf4d929b2fa8fd2d2e6dec5bb0feb4f4911d
-- name: github.com/parnurzeal/gorequest
-  version: a578a48e8d6ca8b01a3b18314c43c6716bb5f5a3
-- name: github.com/pkg/errors
-  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+  version: 3fb116b820352b7f0c281308a4d6250c22d94e27
 - name: github.com/PuerkitoBio/goquery
   version: dc2ec5c7ca4d9aae063b79b9f581dd3ea6afd2b2
-- name: golang.org/x/net
-  version: 4cb1c02c05b0e749b0365f61ae859a8e0cfceed9
-  subpackages:
-  - publicsuffix
-- name: golang.org/x/sys
-  version: 7138fd3d9dc8335c567ca206f4333fb75eb05d56
-  subpackages:
-  - unix
+- name: github.com/tidwall/gjson
+  version: f123b340873a0084cb27267eddd8ff615115fbff
+- name: github.com/tidwall/match
+  version: 33827db735fff6510490d69a8622612558a557ed
+- name: golang.org/x/sys/unix
+  version: b90733256f2e882e81d52f9126de08df5615afd9
 testImports: []

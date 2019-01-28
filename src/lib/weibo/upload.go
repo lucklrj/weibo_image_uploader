@@ -2,20 +2,20 @@ package weibo
 
 import (
 	"encoding/base64"
-	"lib/system"
-	"os"
-	"io/ioutil"
-	"regexp"
-	"github.com/tidwall/gjson"
 	"errors"
-	"strconv"
+	"github.com/tidwall/gjson"
+	"io/ioutil"
+	"lib/http"
+	"lib/system"
 	"math/rand"
 	http2 "net/http"
-	"lib/http"
+	"os"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
-func UploadImg(filePath string, cookies []*http2.Cookie) string {
+func UploadImg(filePath string, cookies []*http2.Cookie, nickname string) string {
 	fileContent := []byte("")
 	if strings.HasPrefix(filePath, "http://") == true || strings.HasPrefix(filePath, "https://") == true {
 		fileContentString, errs := http.Request.Get(filePath)
@@ -28,7 +28,7 @@ func UploadImg(filePath string, cookies []*http2.Cookie) string {
 		fileContent, _ = ioutil.ReadAll(file)
 	}
 	
-	imgUploadUrl := "http://picupload.service.weibo.com/interface/pic_upload.php?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog&cb=http://weibo.com/aj/static/upimgback.html?_wv=5&callback=STK_ijax_1111";
+	imgUploadUrl := "http://picupload.service.weibo.com/interface/pic_upload.php?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=" + nickname + "&marks=1&app=miniblog&cb=http://weibo.com/aj/static/upimgback.html?_wv=5&callback=STK_ijax_1111";
 	postData := make(map[string]string)
 	postData["b64_data"] = base64.StdEncoding.EncodeToString([]byte(fileContent))
 	

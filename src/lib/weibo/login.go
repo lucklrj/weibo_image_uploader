@@ -1,20 +1,20 @@
 package weibo
 
 import (
-	"lib/system"
-	"strings"
-	"github.com/tidwall/gjson"
-	"github.com/fatih/color"
-	"math/big"
-	"crypto/rsa"
 	"crypto/rand"
+	"crypto/rsa"
 	"encoding/hex"
-	"lib/http"
-	"regexp"
-	"os"
 	"errors"
+	"github.com/fatih/color"
+	"github.com/tidwall/gjson"
 	"io/ioutil"
+	"lib/http"
+	"lib/system"
+	"math/big"
 	http2 "net/http"
+	"os"
+	"regexp"
+	"strings"
 )
 
 type preLoginData struct {
@@ -127,8 +127,13 @@ func loginSubmit(preLoginData preLoginData) {
 	}
 }
 
-func ParserCookie() ([]*http2.Cookie, error) {
-	cookiePath := "cookie.txt"
+func ParserCookie(account string) ([]*http2.Cookie, error) {
+	cookiePath := ""
+	if account != "" {
+		cookiePath = account + ".txt"
+	} else {
+		cookiePath = "cookie.txt"
+	}
 	cookieFile, err := os.OpenFile(cookiePath, os.O_RDONLY|os.O_CREATE, os.ModePerm)
 	cookieContent, err := ioutil.ReadAll(cookieFile)
 	
