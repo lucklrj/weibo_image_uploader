@@ -3,6 +3,7 @@ package system
 import (
 	"flag"
 	"github.com/fatih/color"
+	"io/ioutil"
 	"os"
 )
 
@@ -31,9 +32,14 @@ func init() {
 }
 
 func GetCookName() string {
+	
+	_, err := ioutil.ReadDir("cookie")
+	if err != nil {
+		os.Mkdir("cookie", 0777)
+	}
 	if *Account == "" {
-		return "cookie.txt"
+		return "cookie/cookie.txt"
 	} else {
-		return *Account + ".txt"
+		return "cookie/" + *Account + ".txt"
 	}
 }
