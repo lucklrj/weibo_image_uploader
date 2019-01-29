@@ -7,6 +7,7 @@ import (
 	"lib/system"
 	"net/http"
 	"os"
+	"regexp"
 )
 
 var (
@@ -17,16 +18,26 @@ type HttpRequest struct {
 }
 
 func (h *HttpRequest) Get(url string) (body string, errs error) {
-	res, _ := httpclient.Begin().Get(url)
+	res, _ := GetHttpClient(url).Begin().Get(url)
 	return res.ToString()
 }
 
 func (h *HttpRequest) Post(url string, postData map[string]string, save_cookie bool, cookies []*http.Cookie) (body string, errs error) {
-	res, _ := httpclient.Begin().WithCookie(cookies...).Post(url, postData)
+	res, _ := GetHttpClient(url).Begin().WithCookie(cookies...).Post(url, postData)
 	if save_cookie == true {
 		saveCookie(url)
 	}
 	return res.ToString()
+}
+func GetHttpClient(url string) *httpclient.HttpClient {
+	reg, _ := regexp.Compile(`^(https?:\/\/.*?)\/.*`)
+	result := reg.FindAllStringSubmatch(url, -1)
+	referer := result[0][1]
+	
+	return httpclient.NewHttpClient().Defaults(httpclient.Map{
+		httpclient.OPT_REFERER:   referer,
+		httpclient.OPT_USERAGENT: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0",
+	})
 }
 func saveCookie(url string) {
 	httpCookie := make(map[string]string)
