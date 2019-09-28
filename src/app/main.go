@@ -17,6 +17,8 @@ func main() {
 		username = base64.StdEncoding.EncodeToString([]byte(username))
 		
 		weibo.Login(username, *system.Password)
+		cookies, err = weibo.ParserCookie(*system.Account)
+		system.OutputAllErros(err, true)
 	}
 	
 	//imgUrl := weibo.UploadImg("girls.jpg", cookies)

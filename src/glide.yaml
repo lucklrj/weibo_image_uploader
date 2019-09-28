@@ -7,4 +7,9 @@ import:
 - package: github.com/tidwall/gjson
   version: v1.1.2
 - package: github.com/ddliu/go-httpclient
-  version: v0.5.1
+  version: v0.6.2
+ignore:
+  - lib/encrypt
+  - lib/system
+  - lib/weibo
+  - lib/http

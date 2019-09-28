@@ -28,13 +28,13 @@ func UploadImg(filePath string, cookies []*http2.Cookie, nickname string) string
 		fileContent, _ = ioutil.ReadAll(file)
 	}
 	
-	imgUploadUrl := "http://picupload.service.weibo.com/interface/pic_upload.php?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=" + nickname + "&marks=1&app=miniblog&cb=http://weibo.com/aj/static/upimgback.html?_wv=5&callback=STK_ijax_1111";
+	imgUploadUrl := "https://picupload.service.weibo.com/interface/pic_upload.php?mime=image%2Fjpeg&data=base64&url=0&markpos=1&logo=&nick=" + nickname + "&marks=1&app=miniblog&cb=http://weibo.com/aj/static/upimgback.html?_wv=5&callback=STK_ijax_1111";
 	postData := make(map[string]string)
 	postData["b64_data"] = base64.StdEncoding.EncodeToString([]byte(fileContent))
 	
 	uploadResult, errs := http.Request.Post(imgUploadUrl, postData, false, cookies)
 	system.OutputAllErros(errs, true)
-	
+
 	reg := regexp.MustCompile(`.*?(\{.*)`)
 	respJsonMatchResult := reg.FindAllStringSubmatch(uploadResult, -1)
 	
