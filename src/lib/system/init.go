@@ -12,6 +12,9 @@ var (
 	Account  = flag.String("account", "", "微博账号")
 	Password = flag.String("password", "", "微博密码")
 	Nickname = flag.String("nickname", "", "微博昵称")
+
+	PostUrl = flag.String("post_url", "", "传送到远端地址")
+	Title = flag.String("title", "", "标题")
 )
 
 func init() {
