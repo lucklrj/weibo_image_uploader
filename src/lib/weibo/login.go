@@ -36,26 +36,26 @@ func Login(username string, password string) {
 	if preLoginData.showpin == "1" {
 		color.Green("请输入验证码")
 	}
-	
+
 	color.Green("加密密码")
 	sp := getPassword(preLoginData, password)
 	preLoginData.su = username
 	preLoginData.sp = sp
-	
+
 	color.Green("开始登陆系统")
 	loginSubmit(preLoginData)
 	color.Green("登陆成功")
-	
+
 }
 
 func preLogin(username string) preLoginData {
 	preLoginUrl := "http://login.sina.com.cn/sso/prelogin.php?entry=weibo&callback=sinaSSOController.preloginCallBack&su=" + username + "&rsakt=mod&checkpin=1&client=ssologin.js(v1.4.18)&_=1461819359582"
-	result, errs := http.Request.Get(preLoginUrl)
+	result, errs := http.Request.Get(preLoginUrl, nil)
 	system.OutputAllErros(errs, true)
-	
+
 	result = strings.Replace(result, "sinaSSOController.preloginCallBack(", "", -1)
 	result = result[0 : len(result)-1]
-	
+
 	htmlJson := gjson.Parse(result)
 	servertime := htmlJson.Get("servertime").String()
 	pcid := htmlJson.Get("pcid").String()
@@ -64,20 +64,20 @@ func preLogin(username string) preLoginData {
 	rsakv := htmlJson.Get("rsakv").String()
 	exectime := htmlJson.Get("exectime").String()
 	showpin := htmlJson.Get("exectime").String()
-	
+
 	return preLoginData{servertime: servertime, pcid: pcid, nonce: nonce, pubkey: pubkey, rsakv: rsakv, exectime: exectime, showpin: showpin}
 }
 
 func getPassword(preLoginData preLoginData, password string) string {
 	int := new(big.Int)
 	int.SetString(preLoginData.pubkey, 16)
-	
+
 	pub := rsa.PublicKey{
 		N: int,
 		E: 65537,
 	}
 	encryString := preLoginData.servertime + "\t" + preLoginData.nonce + "\n" + password
-	
+
 	encryResult, _ := rsa.EncryptPKCS1v15(rand.Reader, &pub, []byte(encryString))
 	return hex.EncodeToString(encryResult)
 }
@@ -104,11 +104,11 @@ func loginSubmit(preLoginData preLoginData) {
 	postData["url"] = "http://weibo.com/ajaxlogin.php?framelogin=1&callback=parent.sinaSSOController.feedBackUrlCallBack"
 	postData["returntype"] = "META"
 	//postData["door"] = "123"
-	
+
 	cookies := make([]*http2.Cookie, 0)
 	postResult, errs := http.Request.Post(postUrl, postData, true, cookies)
 	system.OutputAllErros(errs, true)
-	
+
 	reg := regexp.MustCompile(`(https:\/\/passport.*?)\'`)
 	links := reg.FindAllStringSubmatch(postResult, -1)
 	if len(links) == 0 {
@@ -116,9 +116,9 @@ func loginSubmit(preLoginData preLoginData) {
 		os.Exit(0)
 	}
 	getTokenUrl := links[0][1]
-	tokenResult, err := http.Request.Get(getTokenUrl)
+	tokenResult, err := http.Request.Get(getTokenUrl, nil)
 	system.OutputAllErros(err, true)
-	
+
 	//"uniqueid":"1575892744",
 	reg = regexp.MustCompile(`("uniqueid":".*?",)`)
 	matchResult := reg.FindAllStringSubmatch(tokenResult, -1)
@@ -129,10 +129,10 @@ func loginSubmit(preLoginData preLoginData) {
 
 func ParserCookie(account string) ([]*http2.Cookie, error) {
 	cookiePath := system.GetCookName()
-	
+
 	cookieFile, err := os.OpenFile(cookiePath, os.O_RDONLY|os.O_CREATE, os.ModePerm)
 	cookieContent, err := ioutil.ReadAll(cookieFile)
-	
+
 	if len(cookieContent) == 0 {
 		return nil, nil
 	}
@@ -149,4 +149,8 @@ func ParserCookie(account string) ([]*http2.Cookie, error) {
 	}
 	color.Green("解析cookie成功")
 	return cookies, err
+}
+
+func DeleteCookie(account string) {
+	os.Remove(system.GetCookName())
 }
