@@ -17,6 +17,8 @@ var (
 
 	PostUrl = flag.String("post_url", "", "传送到远端地址")
 	Title   = flag.String("title", "", "标题")
+
+	IsCutBottom = flag.String("is_cut_bottom", "y", "是否切除底部水印")
 )
 
 func init() {

@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"github.com/fatih/color"
 	imgtype "github.com/shamsher31/goimgtype"
+	"gopkg.in/gographics/imagick.v3/imagick"
+
 	"io/ioutil"
 	"lib/http"
 	"lib/system"
@@ -40,15 +42,28 @@ func main() {
 		system.OutputAllErros(err, true)
 	}
 	//多张图
+	remoteUrl := ""
 	imgs := make([]string, 0)
 	if strings.Contains(*system.ImageUrl, ",") {
 		imgUrls := strings.Split(*system.ImageUrl, ",")
 		for _, url := range imgUrls {
-			imgs = append(imgs, weibo.UploadImg(url, cookies, *system.Nickname))
+			remoteUrl = weibo.UploadImg(url, cookies, *system.Nickname)
+			if remoteUrl != "" {
+				imgs = append(imgs, remoteUrl)
+			}
+
 		}
 	} else if *system.ImageUrl != "" {
-		imgs = append(imgs, weibo.UploadImg(*system.ImageUrl, cookies, *system.Nickname))
+		remoteUrl = weibo.UploadImg(*system.ImageUrl, cookies, *system.Nickname)
+		if remoteUrl != "" {
+			imgs = append(imgs, remoteUrl)
+		}
 	}
+	if *system.IsCutBottom == "y" {
+		imagick.Initialize()
+		defer imagick.Terminate()
+	}
+
 	//兼容目录
 	if *system.ImageDir != "" {
 		files, err := ioutil.ReadDir(*system.ImageDir)
@@ -58,10 +73,25 @@ func main() {
 			for _, file := range files {
 				filePath := *system.ImageDir + file.Name()
 				_, err := imgtype.Get(filePath)
+
 				if err != nil {
 					color.Red(filePath + " 不是图片")
 				} else {
-					imgs = append(imgs, weibo.UploadImg(filePath, cookies, *system.Nickname))
+					if *system.IsCutBottom == "y" {
+						mw := imagick.NewMagickWand()
+						mw.ReadImage(filePath)
+						imageWidth := mw.GetImageWidth()
+						imageHeight := mw.GetImageHeight()
+
+						mw.CropImage(imageWidth, imageHeight-30, 0, 0)
+						mw.SetImageCompressionQuality(95)
+						mw.WriteImage(filePath)
+						mw.Destroy()
+					}
+					remoteUrl = weibo.UploadImg(filePath, cookies, *system.Nickname)
+					if remoteUrl != "" {
+						imgs = append(imgs, remoteUrl)
+					}
 				}
 			}
 		}

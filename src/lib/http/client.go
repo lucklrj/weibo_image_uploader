@@ -29,8 +29,8 @@ func (h *HttpRequest) Post(url string, postData map[string]string, save_cookie b
 	hc := GetHttpClient(url)
 	res, err := hc.Begin().WithCookie(cookies...).Post(url, postData)
 	if err != nil {
-		color.Red(err.Error())
-		os.Exit(0)
+		//color.Red(err.Error())
+		return "", err
 	}
 	if save_cookie == true {
 		saveCookie(hc, url)
