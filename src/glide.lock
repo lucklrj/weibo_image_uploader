@@ -1,5 +1,5 @@
-hash: b60d62995e0637695a11caadf0e3f14cecddb3fe4c10ecffa3c9c06e4537f036
-updated: 2019-12-14T14:44:54.721738+08:00
+hash: bdc49b077f8d2f6246f0572ed2d14c8a52758df8e67fa3317102c46b8ad9208d
+updated: 2020-06-05T00:27:45.439814+08:00
 imports:
 - name: github.com/ddliu/go-httpclient
   version: 095b03c7bbcc67af3414611b53c2bc2e75529269
@@ -13,8 +13,6 @@ imports:
   version: dc2ec5c7ca4d9aae063b79b9f581dd3ea6afd2b2
 - name: github.com/shamsher31/goimgext
   version: ad898e2bd6449562fe9d27d34e3de579924da628
-- name: github.com/shamsher31/goimgtype
-  version: b89e0389fe23ac4e5e9a57efc85a8b66eeb6f1ab
 - name: github.com/tidwall/gjson
   version: f123b340873a0084cb27267eddd8ff615115fbff
 - name: github.com/tidwall/match
@@ -23,8 +21,9 @@ imports:
   version: c990c680b611ac1aeb7d8f2af94a825f98d69720
   subpackages:
   - unix
-- name: gopkg.in/gographics/imagick.v3
-  version: e5c95c340c8d9bf140ca670563906805b655d9d9
+- name: gopkg.in/gographics/imagick.v2
+  version: a49906e098d6ee7c83a5e0c54668567acc1c5311
   subpackages:
   - imagick
+  - imagick/types
 testImports: []

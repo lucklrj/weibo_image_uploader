@@ -8,8 +8,8 @@ import:
   version: v1.1.2
 - package: github.com/ddliu/go-httpclient
   version: v0.6.2
-- package: gopkg.in/gographics/imagick.v3/imagick
-  version: v3.2.0
+- package: gopkg.in/gographics/imagick.v2/imagick
+  version: v2.2.0
 ignore:
   - lib/encrypt
   - lib/system

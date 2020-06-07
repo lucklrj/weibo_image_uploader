@@ -73,5 +73,5 @@ func getImgUrl(pid string) string {
 	 * cdn 编号都能访问到同一资源，所以根据 pid 来判断 cdn 编号
 	 * 当前实际上没啥意义了，有些实现甚至直接写死 cdn 编号
 	 */
-	return "https://ws" + strconv.Itoa(rand.Intn(3)+1) + ".sinaimg.cn/large/" + pid
+	return "https://wx" + strconv.Itoa(rand.Intn(3)+1) + ".sinaimg.cn/large/" + pid + ".jpg"
 }

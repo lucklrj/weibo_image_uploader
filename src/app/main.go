@@ -2,17 +2,18 @@ package main
 
 import (
 	"encoding/base64"
-	"github.com/fatih/color"
-	imgtype "github.com/shamsher31/goimgtype"
-	"gopkg.in/gographics/imagick.v3/imagick"
-
 	"io/ioutil"
-	"lib/http"
-	"lib/system"
-	"lib/weibo"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/fatih/color"
+	"gopkg.in/gographics/imagick.v2/imagick"
+
+	imgtype "github.com/shamsher31/goimgtype"
+	"lib/http"
+	"lib/system"
+	"lib/weibo"
 )
 
 func main() {
