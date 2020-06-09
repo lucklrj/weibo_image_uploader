@@ -1,4 +1,4 @@
-package weibo
+package weibo_image_uploader
 
 import (
 	http2 "net/http"
