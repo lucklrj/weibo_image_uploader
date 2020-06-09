@@ -8,8 +8,8 @@ import (
 	"github.com/fatih/color"
 	_ "gopkg.in/gographics/imagick.v2/imagick"
 
-	weibo "github.com/lucklrj/weibo_image_uploader"
 	"github.com/lucklrj/weibo_image_uploader/lib/system"
+	weibo "github.com/lucklrj/weibo_image_uploader/lib/weibo"
 )
 
 func main() {

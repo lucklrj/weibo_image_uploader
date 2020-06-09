@@ -1,4 +1,4 @@
-package weibo_image_uploader
+package weibo
 
 import (
 	"encoding/base64"
